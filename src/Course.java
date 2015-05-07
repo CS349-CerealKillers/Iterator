@@ -10,27 +10,26 @@ public class Course implements Iterable<Student>
     private class CourseIterator implements Iterator<Student>
     {
         private int currentIndex, endIndex;
-        private boolean nextCalled = false;
+        private boolean nextCalled;
+        private ArrayList<Student> students;
 
-        public CourseIterator(int endIndex)
+        public CourseIterator(ArrayList<Student> students)
         {
+            this.students = students;
             this.currentIndex = 0;
-            this.endIndex = endIndex;
+            this.endIndex = this.students.size() - 1;
         }
 
         public boolean hasNext()
         {
-            if((this.currentIndex) <= this.endIndex)
-                return true;
-            else
-                return false;
+            return this.currentIndex <= this.endIndex;
         }
 
         public Student next()
         {
             if(this.hasNext())
             {
-                Student student = students.get(currentIndex);
+                Student student = this.students.get(currentIndex);
                 currentIndex++;
                 nextCalled = true;
                 return student;
@@ -42,7 +41,7 @@ public class Course implements Iterable<Student>
         {
             if(nextCalled)
             {
-                students.remove(currentIndex - 1);
+                this.students.remove(currentIndex - 1);
                 this.endIndex--;
                 this.currentIndex--;
                 this.nextCalled = false;
@@ -63,6 +62,6 @@ public class Course implements Iterable<Student>
 
     public Iterator<Student> iterator()
     {
-        return new CourseIterator(students.size() - 1);
+        return new CourseIterator(this.students);
     }
 }
